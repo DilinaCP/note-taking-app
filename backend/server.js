@@ -18,6 +18,7 @@ connectDB();
 app.use(cors({
   origin: [
     'http://localhost:3000',
+    "https://note-taking-app-9go4.vercel.app" ,
     process.env.FRONTEND_URL 
   ],
   credentials: true
