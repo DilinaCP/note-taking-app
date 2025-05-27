@@ -15,11 +15,9 @@ type Note = {
 
 const NOTES_PER_PAGE = 8;
 
-export default function homepage() {
+export default function Homepage() {
   const [notes, setNotes] = useState<Note[]>([]);
   const [page, setPage] = useState(1);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
   const router = useRouter();
 
   useEffect(() => {
@@ -36,25 +34,19 @@ export default function homepage() {
       }
     })
     .then(res => {
-      setNotes(res.data.data);
+      const data = res.data as { data: Note[] };
+      setNotes(data.data);
     })
-    .catch(err => {
-      console.error('Error fetching notes:', err);
-      setError('Failed to load notes');
-    })
-    .finally(() => {
-      setLoading(false);
-    });
   }, [router]);
 
-  // Pagination logic
+
   const totalPages = Math.ceil(notes.length / NOTES_PER_PAGE);
   const paginatedNotes = notes.slice(
     (page - 1) * NOTES_PER_PAGE,
     page * NOTES_PER_PAGE
   );
 
-  // Delete handler
+
   const handleDelete = async (id: string) => {
     const token = localStorage.getItem('token');
     if (!token) return;
@@ -64,6 +56,7 @@ export default function homepage() {
       });
       setNotes(notes.filter(note => note._id !== id));
     } catch (err) {
+        console.error(err);
       alert('Failed to delete note');
     }
   };

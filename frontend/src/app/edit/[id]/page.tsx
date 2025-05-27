@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 'use client';
 import axios from 'axios';
 import { useRouter, useParams } from 'next/navigation';
@@ -39,7 +41,8 @@ export default function EditNotePage() {
           },
         });
 
-        const noteData = response.data.data; // ✅ fixed: get actual note
+        const data = response.data as { data: Note };
+        const noteData = data.data; 
         setNote(noteData);
         setTitle(noteData.title || '');
         setContent(noteData.content || '');
