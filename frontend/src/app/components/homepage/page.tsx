@@ -1,45 +1,79 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import axios from 'axios';
 import Header from '../header/page';
 
 type Note = {
-  id: number;
+  _id: string;
   title: string;
   content: string;
+  createdAt: string;
 };
 
-export default function NoteList() {
+const NOTES_PER_PAGE = 8;
+
+export default function homepage() {
   const [notes, setNotes] = useState<Note[]>([]);
   const [page, setPage] = useState(1);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
+  const router = useRouter();
 
   useEffect(() => {
-    axios.get<Note[]>('http://localhost:8080/api/notes')
-      .then(res => setNotes(res.data))
-      .catch(err => console.error(err));
-  }, []);
+    const token = localStorage.getItem('token');
 
-  const handleDelete = async (id: number) => {
+    if (!token) {
+      router.push('/login');
+      return;
+    }
+
+    axios.get('http://localhost:8080/api/notes', {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    })
+    .then(res => {
+      setNotes(res.data.data);
+    })
+    .catch(err => {
+      console.error('Error fetching notes:', err);
+      setError('Failed to load notes');
+    })
+    .finally(() => {
+      setLoading(false);
+    });
+  }, [router]);
+
+  // Pagination logic
+  const totalPages = Math.ceil(notes.length / NOTES_PER_PAGE);
+  const paginatedNotes = notes.slice(
+    (page - 1) * NOTES_PER_PAGE,
+    page * NOTES_PER_PAGE
+  );
+
+  // Delete handler
+  const handleDelete = async (id: string) => {
+    const token = localStorage.getItem('token');
+    if (!token) return;
     try {
-      await axios.delete(`http://localhost:8080/api/notes/${id}`);
-      setNotes(notes.filter(note => note.id !== id));
+      await axios.delete(`http://localhost:8080/api/notes/${id}`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      setNotes(notes.filter(note => note._id !== id));
     } catch (err) {
-      console.error('Failed to delete', err);
+      alert('Failed to delete note');
     }
   };
-
-  const totalPages = Math.ceil(notes.length / 8);
-  const startIdx = (page - 1) * 8;
-  const paginatedNotes = notes.slice(startIdx, startIdx + 8);
 
   return (
     <div className="relative min-h-screen bg-[#f6fff8] pb-16">
       <Header />
       <div className="flex items-center justify-between max-w-7xl mx-auto py-8 px-4">
         <h1 className="text-3xl font-bold text-[#31572c]">My Notes</h1>
-        <Link href="/components/NewNote">
+        <Link href="/components/newnote">
           <button className="bg-[#31572c] hover:bg-[#4f772d] text-white px-5 py-2 rounded-lg shadow transition font-semibold">
             + Add Note
           </button>
@@ -51,7 +85,7 @@ export default function NoteList() {
         ) : (
           paginatedNotes.map((note) => (
             <div
-              key={note.id}
+              key={note._id}
               className="bg-white shadow-lg rounded-2xl border-2 border-[#b7e4c7] p-6 flex flex-col transition-transform hover:-translate-y-1 hover:shadow-2xl min-h-[260px]"
             >
               <h3 className="text-xl font-semibold text-[#31572c] mb-2 truncate">{note.title}</h3>
@@ -61,7 +95,7 @@ export default function NoteList() {
                 {note.content}
               </div>
               <div className="mt-4 flex space-x-2">
-                <Link href={`/edit/${note.id}`}>
+                <Link href={`/edit/${note._id}`}>
                   <button
                     className="px-4 py-1 rounded-lg text-white font-medium bg-[#4f772d] border border-[#31572c] hover:bg-[#31572c] transition"
                   >
@@ -70,7 +104,7 @@ export default function NoteList() {
                 </Link>
                 <button
                   className="px-4 py-1 rounded-lg text-white font-medium bg-[#f4a259] border border-[#d37a3f] hover:bg-[#d37a3f] transition"
-                  onClick={() => handleDelete(note.id)}
+                  onClick={() => handleDelete(note._id)}
                 >
                   Delete
                 </button>

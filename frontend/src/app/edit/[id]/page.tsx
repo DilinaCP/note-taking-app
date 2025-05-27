@@ -17,6 +17,7 @@ export default function EditNotePage() {
   const router = useRouter();
   const params = useParams();
   const noteId = params?.id as string;
+
   const [note, setNote] = useState<Note | null>(null);
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
@@ -28,19 +29,20 @@ export default function EditNotePage() {
       try {
         const token = localStorage.getItem('token');
         if (!token) {
-          router.push('/auth/Login');
+          router.push('/auth/login');
           return;
         }
 
-        const response = await axios.get<Note>(`http://localhost:8080/api/notes/${noteId}`, {
+        const response = await axios.get(`http://localhost:8080/api/notes/${noteId}`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         });
 
-        setNote(response.data);
-        setTitle(response.data.title);
-        setContent(response.data.content);
+        const noteData = response.data.data; // ✅ fixed: get actual note
+        setNote(noteData);
+        setTitle(noteData.title || '');
+        setContent(noteData.content || '');
       } catch (error) {
         console.error('Error fetching note:', error);
         setError('Failed to load note. It may not exist or you may not have permission.');
@@ -70,7 +72,7 @@ export default function EditNotePage() {
     try {
       const token = localStorage.getItem('token');
       if (!token) {
-        router.push('/auth/Login');
+        router.push('/auth/login');
         return;
       }
 
@@ -85,8 +87,8 @@ export default function EditNotePage() {
         }
       );
 
-      router.push('/components/NoteList');
-    } catch (error) {
+      router.push('/components/homepage');
+    } catch (error: any) {
       console.error('Error updating note:', error);
       setError(error.response?.data?.message || 'Failed to update note. Please try again.');
     } finally {
@@ -107,7 +109,7 @@ export default function EditNotePage() {
       <div className="max-w-3xl mx-auto mt-10 p-6 bg-white shadow-md rounded-2xl">
         <div className="text-red-500">{error || 'Note not found.'}</div>
         <button
-          onClick={() => router.push('/components/NoteList')}
+          onClick={() => router.push('/components/newnotelist')}
           className="mt-4 px-4 py-2 rounded-lg text-white font-medium bg-[#4f772d] hover:bg-[#31572c] transition"
         >
           Back to Notes
@@ -119,7 +121,7 @@ export default function EditNotePage() {
   return (
     <div className="max-w-3xl mx-auto mt-10 p-6 bg-white shadow-md rounded-2xl">
       <h2 className="text-2xl font-bold mb-4 text-[#31572c]">Edit Note</h2>
-      
+
       {error && (
         <div className="mb-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded">
           {error}
@@ -156,7 +158,7 @@ export default function EditNotePage() {
 
       <div className="flex justify-end space-x-3">
         <button
-          onClick={() => router.push('/components/NoteList')}
+          onClick={() => router.push('/components/newnotelist')}
           disabled={isLoading}
           className="px-4 py-2 rounded-lg text-[#31572c] font-medium bg-white border border-[#31572c] hover:bg-gray-50 transition"
         >

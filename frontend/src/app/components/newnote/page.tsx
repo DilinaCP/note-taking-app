@@ -10,11 +10,11 @@ export default function NewNote() {
   const [error, setError] = useState('');
   const router = useRouter();
 
-  // Redirect to login if not authenticated
+  
   useEffect(() => {
     const token = localStorage.getItem('token');
-    if (token) {
-      router.push('/components/NewNote');
+    if (!token) {
+      router.push('/login');
     }
   }, [router]);
 
@@ -33,8 +33,8 @@ export default function NewNote() {
 
     try {
       const token = localStorage.getItem('token');
-      if (token) {
-        router.push('/components/NewNote');
+      if (!token) {
+        router.push('/login');
         return;
       }
 
@@ -50,15 +50,16 @@ export default function NewNote() {
       );
 
       if (response.status === 201) {
-        router.push('/components/NoteList');
+        router.push('/components/homepage');
       }
-    } catch (err) {
+    } catch (err: any) {
       console.error('Failed to save note:', err);
       setError(err.response?.data?.message || 'Failed to save note. Please try again.');
     } finally {
       setIsLoading(false);
     }
   };
+
 
   return (
     <div className="w-full max-w-3xl mx-auto mt-10 p-6 rounded-2xl shadow bg-white">
@@ -109,7 +110,7 @@ export default function NewNote() {
 
       <div className="flex justify-end space-x-3">
         <button
-          onClick={() => router.push('/components/NoteList')}
+          onClick={() => router.push('/components/newnotelist')}
           disabled={isLoading}
           className="px-4 py-2 rounded-lg text-[#31572c] font-medium bg-white border border-[#31572c] hover:bg-gray-50 transition"
         >

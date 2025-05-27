@@ -1,28 +1,22 @@
 const mongoose = require('mongoose');
 
-const noteSchema = new mongoose.Schema({
-  title: { 
-    type: String, 
-    required: [true, 'Title is required'],
-    trim: true,
-    maxlength: [100, 'Title cannot be more than 100 characters']
+const NoteSchema = new mongoose.Schema({
+  user: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+    required: true
   },
-  content: { 
-    type: String, 
-    required: [true, 'Content is required'],
-    trim: true
+  title: {
+    type: String,
+    required: true
   },
-  user: { 
-    type: mongoose.Schema.Types.ObjectId, 
-    ref: 'User', 
-    required: true 
+  content: {
+    type: String
+  },
+  createdAt: {
+    type: Date,
+    default: Date.now
   }
-}, {
-  timestamps: true,
-  toJSON: { virtuals: true },
-  toObject: { virtuals: true }
 });
 
-noteSchema.index({ title: 'text', content: 'text' });
-
-module.exports = mongoose.model('Note', noteSchema);
+module.exports = mongoose.model('Note', NoteSchema);

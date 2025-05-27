@@ -32,8 +32,14 @@ const Login = () => {
     setIsLoading(true);
     try {
       const res = await axios.post('http://localhost:8080/api/user/login', { email, password });
-      toast.success("Login successful!");
-      router.push('/components/homepage'); 
+      const data = res.data as { token?: string };
+      if (data.token) {
+        localStorage.setItem('token', data.token); 
+        toast.success("Login successful!");
+        router.push('/components/homepage');
+      } else {
+        toast.error("No token received");
+      }
     } catch (error) {
       console.error(error);
       toast.error("Invalid email or password");
