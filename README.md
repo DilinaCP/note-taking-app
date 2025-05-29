@@ -1,4 +1,4 @@
-## ✅ `README.md` for Note-Taking App (Petalpad)
+## ✅ Note-Taking App (Petalpad)
 
 # 📝 Petalpad – Note-Taking App
 
