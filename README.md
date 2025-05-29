@@ -1,3 +1,5 @@
+## ✅ `README.md` for Note-Taking App (Petalpad)
+
 # 📝 Petalpad – Note-Taking App
 
 A stylish and secure full-stack note-taking app built with **Next.js 14**, **Express.js**, and **MongoDB**, allowing users to create, update, and delete notes after authentication.
@@ -30,15 +32,19 @@ A stylish and secure full-stack note-taking app built with **Next.js 14**, **Exp
 ---
 
 ## 📁 Project Structure
-note-taking-app/
-├── frontend/ # Next.js app
-│ └── pages/
-│ └── components/
-├── backend/ # Express API
-│ └── routes/
-│ └── models/
-│ └── server.js
 
+```
+
+note-taking-app/
+├── frontend/        # Next.js app
+│   └── pages/
+│   └── components/
+├── backend/         # Express API
+│   └── routes/
+│   └── models/
+│   └── server.js
+
+````
 
 ---
 
@@ -48,32 +54,54 @@ note-taking-app/
 ```bash
 git clone https://github.com/DilinaCP/note-taking-app.git
 cd note-taking-app
+````
 
+### 2. Run the Backend
+
+```bash
 cd backend
 npm install
 npm run dev   # or npm start
+```
 
+Create a `.env` file in `backend/`:
+
+```
+PORT=5000
+MONGO_URI=your_mongodb_connection_string
+JWT_SECRET=your_jwt_secret
+```
+
+### 3. Run the Frontend
+
+```bash
 cd ../frontend
 npm install
 npm run dev
+```
 
-🛠 API Endpoints 
-POST /api/signup – Register a user
+---
 
-POST /api/login – Authenticate and return JWT
+## 🛠 API Endpoints 
 
-GET /api/notes – Get user notes
+* `POST /api/signup` – Register a user
+* `POST /api/login` – Authenticate and return JWT
+* `GET /api/notes` – Get user notes
+* `POST /api/notes` – Create a note
+* `PUT /api/notes/:id` – Edit a note
+* `DELETE /api/notes/:id` – Delete a note
 
-POST /api/notes – Create a note
+---
 
-PUT /api/notes/:id – Edit a note
+## 📄 License
 
-DELETE /api/notes/:id – Delete a note
-
-📄 License
 This project is licensed under the MIT License.
 
-🙌 Acknowledgments
-Developed as a personal project by Dilina Perera
+---
 
-Inspired by modern note-taking UIs like Notion and Google Keep
+## 🙌 Acknowledgments
+
+* Developed as a personal project by [Dilina Perera](https://github.com/DilinaCP)
+* Inspired by modern note-taking UIs like Notion and Google Keep
+
+
