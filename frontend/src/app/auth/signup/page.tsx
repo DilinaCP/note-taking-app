@@ -43,7 +43,7 @@ const Signup = () => {
     setIsLoading(true);
     try {
     const { fullName, email, password } = formData;
-      await axios.post('http://localhost:8080/api/user', { fullName, email, password });
+      await axios.post('https://note-taking-app-i2uk.onrender.com/api/user', { fullName, email, password });
       toast.success('Signup successful!');
       router.push('/auth/login/');
     } catch (error) {

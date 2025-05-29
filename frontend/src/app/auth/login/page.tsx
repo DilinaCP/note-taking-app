@@ -31,7 +31,7 @@ const Login = () => {
 
     setIsLoading(true);
     try {
-      const res = await axios.post('http://localhost:8080/api/user/login', { email, password });
+      const res = await axios.post('https://note-taking-app-i2uk.onrender.com/api/user/login', { email, password });
       const data = res.data as { token?: string };
       if (data.token) {
         localStorage.setItem('token', data.token); 

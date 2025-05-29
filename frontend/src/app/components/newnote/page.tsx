@@ -42,7 +42,7 @@ export default function NewNote() {
       }
 
       const response = await axios.post(
-        'http://localhost:8080/api/notes',
+        'https://note-taking-app-i2uk.onrender.com/api/notes',
         { title, content },
         {
           headers: {

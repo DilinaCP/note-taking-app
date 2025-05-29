@@ -35,7 +35,7 @@ export default function EditNotePage() {
           return;
         }
 
-        const response = await axios.get(`http://localhost:8080/api/notes/${noteId}`, {
+        const response = await axios.get(`https://note-taking-app-i2uk.onrender.com/api/notes/${noteId}`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -80,7 +80,7 @@ export default function EditNotePage() {
       }
 
       await axios.put(
-        `http://localhost:8080/api/notes/${noteId}`,
+        `https://note-taking-app-i2uk.onrender.com/api/notes/${noteId}`,
         { title, content },
         {
           headers: {

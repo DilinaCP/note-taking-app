@@ -28,7 +28,7 @@ export default function Homepage() {
       return;
     }
 
-    axios.get('http://localhost:8080/api/notes', {
+    axios.get('https://note-taking-app-i2uk.onrender.com/api/notes', {
       headers: {
         Authorization: `Bearer ${token}`
       }
@@ -51,7 +51,7 @@ export default function Homepage() {
     const token = localStorage.getItem('token');
     if (!token) return;
     try {
-      await axios.delete(`http://localhost:8080/api/notes/${id}`, {
+      await axios.delete(`https://note-taking-app-i2uk.onrender.com/api/notes/${id}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setNotes(notes.filter(note => note._id !== id));
