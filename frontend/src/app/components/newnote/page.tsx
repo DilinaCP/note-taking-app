@@ -113,7 +113,7 @@ export default function NewNote() {
 
       <div className="flex justify-end space-x-3">
         <button
-          onClick={() => router.push('/components/newnotelist')}
+          onClick={() => router.push('/components/homepage')}
           disabled={isLoading}
           className="px-4 py-2 rounded-lg text-[#31572c] font-medium bg-white border border-[#31572c] hover:bg-gray-50 transition"
         >
